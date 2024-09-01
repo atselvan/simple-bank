@@ -1,4 +1,4 @@
-# Golang Backend Masterclass
+# Simple Bank Example
 
 ## Create Database Schema
 
