@@ -1,0 +1,15 @@
+
+services:
+
+  db:
+    image: postgres:16.4-alpine3.20
+    restart: always
+    environment:
+      POSTGRES_USER: dbadmin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: simple-bank
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+      
