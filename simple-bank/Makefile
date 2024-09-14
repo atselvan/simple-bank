@@ -1,4 +1,4 @@
-.PHONY: app-up app-down migrateup migratedown
+.PHONY: app-up app-down migrateup migratedown sqlc
 
 # Load the environment variables from the config.env file
 include config.env
@@ -28,3 +28,7 @@ migrate-up:
 migrate-down:
 	@echo "Running migration down"
 	@migrate -path db/migration -database "postgresql://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable"  -verbose down
+
+sqlc:
+	@echo "Running sqlc"
+	@sqlc generate
