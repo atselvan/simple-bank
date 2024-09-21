@@ -22,12 +22,12 @@ migrate-init:
 # Migrate the database up
 migrate-up:
 	@echo "Running migration up"
-	@migrate -path db/migration -database "postgresql://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable"  -verbose up
+	@migrate -path db/migration -database "postgresql://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable" -verbose up
 
 # Migrate the database down
 migrate-down:
 	@echo "Running migration down"
-	@migrate -path db/migration -database "postgresql://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable"  -verbose down
+	@migrate -path db/migration -database "postgresql://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable" -verbose down
 
 sqlc:
 	@echo "Running sqlc"
