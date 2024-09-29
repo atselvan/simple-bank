@@ -2,18 +2,18 @@ package db
 
 import (
 	"context"
+	"github.com/stretchr/testify/require"
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestGetAccount(t *testing.T) {
 	createdAccount := createTestAccount(t)
 
-	account, err := testQueries.GetAccount(context.Background(), createdAccount.ID)
-	assert.NoError(t, err)
-	assert.Equal(t, createdAccount, account)
+	result, err := testQueries.GetAccount(context.Background(), createdAccount.ID)
+	require.NoError(t, err)
+	require.Equal(t, createdAccount, result)
 }
 
 func TestCreateAccount(t *testing.T) {
@@ -25,26 +25,26 @@ func TestUpdateAccount(t *testing.T) {
 
 	input := UpdateAccountParams{
 		ID:      createdAccount.ID,
-		Balance: getRandomBalance(),
+		Balance: getRandomAmount(),
 	}
 
 	err := testQueries.UpdateAccount(context.Background(), input)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
-	updatedAccount, err := testQueries.GetAccount(context.Background(), createdAccount.ID)
-	assert.NoError(t, err)
-	assert.Equal(t, input.ID, updatedAccount.ID)
-	assert.Equal(t, input.Balance, updatedAccount.Balance)
+	result, err := testQueries.GetAccount(context.Background(), createdAccount.ID)
+	require.NoError(t, err)
+	require.Equal(t, input.ID, result.ID)
+	require.Equal(t, input.Balance, result.Balance)
 }
 
 func TestDeleteAccount(t *testing.T) {
 	createdAccount := createTestAccount(t)
 
 	err := testQueries.DeleteAccount(context.Background(), createdAccount.ID)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	_, err = testQueries.GetAccount(context.Background(), createdAccount.ID)
-	assert.Error(t, err)
+	require.Error(t, err)
 }
 
 func TestListAccounts(t *testing.T) {
@@ -57,35 +57,34 @@ func TestListAccounts(t *testing.T) {
 		Offset: 5,
 	}
 
-	accounts, err := testQueries.ListAccounts(context.Background(), input)
-	assert.NoError(t, err)
-	assert.Len(t, accounts, 5)
-	for _, account := range accounts {
-		assert.NotEmpty(t, account)
+	result, err := testQueries.ListAccounts(context.Background(), input)
+	require.NoError(t, err)
+	require.Len(t, result, 5)
+	for _, account := range result {
+		require.NotEmpty(t, account)
 	}
 }
 
 func createTestAccount(t *testing.T) Account {
 	input := CreateAccountParams{
 		Owner:    gofakeit.Name(),
-		Balance:  getRandomBalance(),
+		Balance:  getRandomAmount(),
 		Currency: "EUR",
 	}
 
-	account, err := testQueries.CreateAccount(context.Background(), input)
-	assert.NoError(t, err)
-	assert.NotEmpty(t, account)
+	result, err := testQueries.CreateAccount(context.Background(), input)
+	require.NoError(t, err)
+	require.NotEmpty(t, result)
 
-	assert.Equal(t, input.Owner, account.Owner)
-	assert.Equal(t, input.Balance, account.Balance)
-	assert.Equal(t, input.Currency, account.Currency)
+	require.Equal(t, input.Owner, result.Owner)
+	require.Equal(t, input.Balance, result.Balance)
+	require.Equal(t, input.Currency, result.Currency)
+	require.NotZero(t, result.ID)
+	require.NotZero(t, result.CreatedAt)
 
-	assert.NotZero(t, account.ID)
-	assert.NotZero(t, account.CreatedAt)
-
-	return account
+	return result
 }
 
-func getRandomBalance() int64 {
+func getRandomAmount() int64 {
 	return int64(gofakeit.Number(0, 1000))
 }
