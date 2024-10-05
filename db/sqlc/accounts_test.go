@@ -28,10 +28,8 @@ func TestUpdateAccount(t *testing.T) {
 		Balance: getRandomAmount(),
 	}
 
-	err := testQueries.UpdateAccount(context.Background(), input)
+	result, err := testQueries.UpdateAccount(context.Background(), input)
 	require.NoError(t, err)
-
-	result, err := testQueries.GetAccount(context.Background(), createdAccount.ID)
 	require.NoError(t, err)
 	require.Equal(t, input.ID, result.ID)
 	require.Equal(t, input.Balance, result.Balance)
@@ -86,5 +84,5 @@ func createTestAccount(t *testing.T) Account {
 }
 
 func getRandomAmount() int64 {
-	return int64(gofakeit.Number(0, 1000))
+	return int64(gofakeit.Number(100, 1000))
 }

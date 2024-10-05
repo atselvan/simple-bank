@@ -16,6 +16,7 @@ const (
 
 var (
 	testQueries *Queries
+	testStore   *Store
 )
 
 func TestMain(m *testing.M) {
@@ -24,6 +25,8 @@ func TestMain(m *testing.M) {
 		log.Fatal("cannot connect to the db: ", err)
 	}
 	testQueries = New(conn)
+
+	testStore = NewStore(conn)
 
 	os.Exit(m.Run())
 }

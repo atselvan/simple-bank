@@ -1,8 +1,17 @@
-.PHONY: app-up app-down migrateup migratedown sqlc
+.PHONY: dep test app-up app-down migrateup migratedown sqlc
 
 # Load the environment variables from the config.env file
 include config.env
 export $(shell sed 's/=.*//' config.env)
+
+dep:
+	@echo "Install/Update dependencies"
+	go get -u -t
+	go mod tidy
+
+test:
+	@echo "Running tests"
+	go test ./...
 
 # Bring up all elements of the application
 app-up:
