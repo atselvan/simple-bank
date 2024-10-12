@@ -2,16 +2,13 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
+	"github.com/atselvan/simple-bank/util"
 	"log"
 	"os"
 	"testing"
 
 	_ "github.com/lib/pq"
-)
-
-const (
-	dbDriver = "postgres"
-	dbSource = "postgresql://sbAdmin:postgres@localhost:5432/simple-bank?sslmode=disable"
 )
 
 var (
@@ -20,7 +17,20 @@ var (
 )
 
 func TestMain(m *testing.M) {
-	conn, err := sql.Open(dbDriver, dbSource)
+	config, err := util.LoadConfig("../../")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+
+	dbSource := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable",
+		config.DBUserName,
+		config.DBPassword,
+		config.DBHost,
+		config.DBPort,
+		config.DBName,
+	)
+
+	conn, err := sql.Open(config.DBDriver, dbSource)
 	if err != nil {
 		log.Fatal("cannot connect to the db: ", err)
 	}
